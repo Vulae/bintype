@@ -6,6 +6,8 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "declaration": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "target": "ESNext",
         "outDir": "dist"
     }

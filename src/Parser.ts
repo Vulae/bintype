@@ -2,8 +2,7 @@
 import Pako from "pako";
 import { BitIO, IO } from "./IO";
 import { decodeBigInt, encodeBigInt, hex } from "./Util";
-
-
+import { Base64 } from "js-base64";
 
 
 
@@ -13,6 +12,14 @@ function compress(data: ArrayBuffer): ArrayBuffer {
 
 function decompress(data: ArrayBuffer): ArrayBuffer {
     return Pako.inflateRaw(data).buffer;
+}
+
+function encodeBase64(data: ArrayBuffer, urlSafe: boolean = false): string {
+    return Base64.fromUint8Array(new Uint8Array(data), urlSafe);
+}
+
+function decodeBase64(data: string): ArrayBuffer {
+    return Base64.toUint8Array(data).buffer;
 }
 
 
@@ -30,16 +37,33 @@ export abstract class Parser<T> {
     /**
      * Encode the value into binary data.
      */
-    public encode(value: T, options: EncodeContextOptions = { }): ArrayBuffer {
+    public encode(value: T, options?: EncodeContextOptions & {
+        readonly base64?: false;
+    }): ArrayBuffer;
+    public encode(value: T, options?: EncodeContextOptions & {
+        readonly base64: true;
+    }): string;
+    public encode(value: T, options: EncodeContextOptions & {
+        readonly base64?: boolean;
+        readonly base64UrlSafe?: boolean;
+    } = { }): ArrayBuffer | string {
         const ctx: EncodeContext = new EncodeContext(this, options);
         ctx.encode(this, value as ParserType<this>);
-        return ctx.final();
+        const encoded = ctx.final();
+        if(options.base64 ?? false) {
+            return encodeBase64(encoded, options.base64UrlSafe ?? false);
+        } else {
+            return encoded;
+        }
     }
 
     /**
      * Decode binary data into the value.
      */
-    public decode(buffer: ArrayBuffer): T {
+    public decode(buffer: ArrayBuffer | string): T {
+        if(typeof buffer == 'string') {
+            buffer = decodeBase64(buffer);
+        }
         const ctx: DecodeContext = new DecodeContext(this, buffer);
         return ctx.decode(this);
     }
