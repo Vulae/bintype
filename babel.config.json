@@ -1,0 +1,13 @@
+{
+    "presets": [
+        "@babel/preset-typescript"
+    ],
+    "plugins": [
+        [ "@babel/plugin-transform-modules-commonjs", {
+            "allowTopLevelThis": true,
+            "addExtension": true,
+            "mjs": true,
+            "extensions": [ "js" ]
+        } ]
+    ]
+}

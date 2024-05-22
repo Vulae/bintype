@@ -12,9 +12,13 @@
         "./*": "./dist/*"
     },
     "scripts": {
-        "build": "tsc"
+        "build": "babel src --out-dir dist --extensions \".ts\" && tsc --emitDeclarationOnly"
     },
     "devDependencies": {
+        "@babel/cli": "^7.24.5",
+        "@babel/core": "^7.24.5",
+        "@babel/plugin-transform-modules-commonjs": "^7.24.1",
+        "@babel/preset-typescript": "^7.24.1",
         "@types/node": "^20.12.12",
         "@types/pako": "^2.0.3",
         "ts-node": "^10.9.2",
