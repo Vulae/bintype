@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "downlevelIteration": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "declaration": true,
+        "target": "ESNext",
+        "outDir": "dist"
+    }
+}
