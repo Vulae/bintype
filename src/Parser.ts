@@ -51,6 +51,8 @@ export abstract class Parser<T> {
 
 interface ContextBase {
     readonly baseType: Parser<any>;
+    readonly stack: Parser<any>[];
+
     readonly bitField: BitIO;
     readonly body: IO;
 }
@@ -73,6 +75,7 @@ export interface EncodeContextOptions {
 
 export class EncodeContext implements ContextBase {
     public readonly baseType: Parser<any>;
+    public readonly stack: Parser<any>[] = [];
 
     public readonly bitField: BitIO = new BitIO();
     public readonly body: IO = new IO();
@@ -119,12 +122,15 @@ export class EncodeContext implements ContextBase {
     }
     
     public encode<P extends Parser<any>>(type: P, value: ParserType<P>): void {
+        this.stack.push(type);
         type.encodeInternal(this, value);
+        this.stack.pop();
     }
 }
 
 export class DecodeContext implements ContextBase {
     public readonly baseType: Parser<any>;
+    public readonly stack: Parser<any>[] = [];
 
     public readonly bitField: BitIO;
     public readonly body: IO;
@@ -155,7 +161,10 @@ export class DecodeContext implements ContextBase {
     }
 
     public decode<P extends Parser<any>>(type: P): ParserType<P> {
-        return type.decodeInternal(this);
+        this.stack.push(type);
+        const value = type.decodeInternal(this);
+        this.stack.pop();
+        return value;
     }
 }
 
