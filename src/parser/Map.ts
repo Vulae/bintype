@@ -17,6 +17,7 @@ export class MapParser<K extends Parser<string | number>, V extends Parser<any>>
         this.magic = hashStr(`MapParser:${this.keyType.magic}-${this.valueType.magic}`);
     }
 
+    // TODO: Allow Record<ParserType<K>, ParserType<V>> as an argument
     public encodeInternal(ctx: EncodeContext, map: Map<ParserType<K>, ParserType<V>>): void {
         ctx.encode(new BigIntParser(false), BigInt(map.size));
         for(const [ key, value ] of map.entries()) {

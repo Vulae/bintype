@@ -17,7 +17,7 @@ export class EnumParser<T extends string[] | number[]> extends Parser<T[keyof T]
     public encodeInternal(ctx: EncodeContext, value: T[keyof T]): void {
         const index = this.values.findIndex(v => v == value);
         if(index === -1) {
-            throw new Error('BranchByKeyParser: Failed to find key index.');
+            throw new Error('EnumParser: Failed to find key index.');
         }
         encodeIndex(ctx, index, this.values.length);
     }

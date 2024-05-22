@@ -168,4 +168,15 @@ function _enum<T extends string[] | number[]>(values: [...T]): EnumParser<T> {
 }
 export { _enum as enum };
 
+import { EnumFallbackParser } from "./parser/EnumFallback";
+export { EnumFallbackParser };
+/**
+ * Stores an enum.
+ * If enum doesn't match, parser will store the whole value.
+ * @param values Possible enum values.
+ */
+export function enumFallback<T extends string[]>(values: [...T]): EnumFallbackParser<T> {
+    return new EnumFallbackParser(values);
+}
+
 
