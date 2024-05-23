@@ -65,5 +65,39 @@ console.log(SCHEMA_USER.decode(encodedUser));
 ```
 
 ```TypeScript
-// TODO: Example of branchByKey
+const SCHEMA_MESSAGE = bt.object({
+    // branchByKey: branch parser object by object's key.
+    sender: bt.branchByKey('type', {
+        system: { },
+        user: {
+            user: SCHEMA_USER
+        }
+    }),
+    createdAt: bt.date(),
+    content: bt.branchByKey('type', {
+        message: {
+            message: bt.string()
+        },
+        image: {
+            url: bt.string()
+        },
+        attachment: {
+            // bigint: store an unsigned or signed bigint.
+            fileSize: bt.bigint(false),
+            fileName: bt.string(),
+            fileUrl: bt.string()
+        }
+    })
+});
+
+const encodedMessage = SCHEMA_MESSAGE.encode({
+    sender: { type: 'system' },
+    createdAt: new Date(),
+    content: {
+        type: 'message',
+        message: 'Hello, World!'
+    }
+});
+
+console.log(SCHEMA_MESSAGE.decode(encodedMessage));
 ```
