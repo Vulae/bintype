@@ -102,7 +102,7 @@ export function array<A extends Parser<any>>(type: A): ArrayParser<A> {
 }
 
 import { MapParser } from "./parser/Map";
-export { MapParser as RecordParser };
+export { MapParser };
 /**
  * Stores a key value map.
  * @param keyType Key type.
@@ -132,7 +132,7 @@ export function tuple<T extends Parser<any>[]>(tupleTypes: [...T]): TupleParser<
 }
 
 import { BranchParser } from "./parser/Branch";
-export { BranchParser as OrParser };
+export { BranchParser };
 /**
  * Branch parser type by value.
  * @param branchTypes Branch value type map.
