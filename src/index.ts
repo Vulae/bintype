@@ -7,8 +7,8 @@ export { Parser, ParserType, EncodeContext, DecodeContext };
 import { IO, BitIO } from "./IO";
 export { IO, BitIO };
 
-import { hashStr, stringSort, encodeBigInt, decodeBigInt, encodeIndex, decodeIndex } from "./Util";
-export { hashStr, stringSort, encodeBigInt, decodeBigInt, encodeIndex, decodeIndex };
+import { hashStr, stringSort, encodeBigInt, decodeBigInt, encodeIndex, decodeIndex, NumberPacker } from "./Util";
+export { hashStr, stringSort, encodeBigInt, decodeBigInt, encodeIndex, decodeIndex, NumberPacker };
 
 
 

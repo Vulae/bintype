@@ -139,3 +139,44 @@ export function decodeIndex(ctx: DecodeContext, length: number): number {
 }
 
 
+
+
+
+export class NumberPacker<T extends number[]> {
+    public readonly maxs: {[K in keyof T]: bigint};
+
+    public constructor(maxs: [...T]) {
+        this.maxs = maxs.map(max => BigInt(max + 1)) as {[K in keyof T]: bigint};
+    }
+
+    public encode(values: {[K in keyof T]: number}): bigint {
+        if(values.length != this.maxs.length) {
+            throw new Error('NumberPacker: Failed to pack values, invalid number of values.');
+        }
+        let packed = 0n;
+        for(let i = 0; i < this.maxs.length; i++) {
+            if(!Number.isInteger(values[i])) {
+                throw new Error('NumberPacker: Failed to pack value, Value is float.');
+            }
+            if(values[i] < 0) {
+                throw new Error('NumberPacker: Failed to pack value, Value is negative.');
+            }
+            if(values[i] >= this.maxs[i]) {
+                throw new Error('NumberPacker: Failed to pack value, Value is larger than its max.');
+            }
+            packed *= this.maxs[i];
+            packed += BigInt(values[i]);
+        }
+        return packed;
+    }
+
+    public decode(packed: bigint): {[K in keyof T]: number} {
+        // @ts-ignore
+        let values: {[K in keyof T]: number} = [];
+        for(let i = this.maxs.length - 1; i >= 0; i--) {
+            values.unshift(Number(packed % this.maxs[i]));
+            packed /= this.maxs[i];
+        }
+        return values;
+    }
+}
